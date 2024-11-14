@@ -1,0 +1,27 @@
+/* Remove margens e preenchimento padrão, mantendo responsividade */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.background-image {
+    background-image: url('fundo.png');
+    background-size: cover;
+    background-position: center;
+}
+
+#drawButton {
+    font-size: 1.5rem;
+}
+
+#winnerName {
+    font-size: 3rem;
+    font-weight: bold;
+}
