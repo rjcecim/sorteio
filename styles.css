@@ -1,51 +1,131 @@
-/* Aplica a redefinição de margem e preenchimento em todos os elementos HTML e body, e define altura total e desativa a rolagem */
-body, html {
-  margin: 0; /* Remove a margem padrão */
-  padding: 0; /* Remove o preenchimento padrão */
-  height: 100%; /* Define a altura como 100% da altura da janela de visualização */
-  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse o limite da altura definida */
+/* Redefinição global para remover padrões e garantir consistência */
+*, *:before, *:after {
+  margin: 0; /* Remove margens padrão */
+  padding: 0; /* Remove preenchimentos padrão */
+  box-sizing: border-box; /* Inclui padding e bordas no cálculo de tamanho */
 }
 
-/* Estiliza a div de imagem de fundo para cobrir a parte superior da tela */
+/* Configuração básica da página */
+html, body {
+  height: 100%; /* Altura total da janela de visualização */
+  overflow: hidden; /* Impede rolagem para manter o layout fixo */
+  font-family: 'Arial', sans-serif; /* Define fonte moderna e legível */
+}
+
+/* Estilização da imagem de fundo */
 .background-image {
   background-image: url('fundo.png'); /* Define a imagem de fundo */
-  background-size: 100% 100%; /* Escala a imagem para cobrir completamente a área definida */
-  background-position: center; /* Centraliza a imagem de fundo */
-  background-repeat: no-repeat; /* Impede a repetição da imagem */
-  width: 100%; /* Largura completa da área de visualização */
-  height: calc(66.67vh); /* Altura definida como dois terços da altura da janela de visualização */
+  background-size: cover; /* Escala a imagem para cobrir a área, ajustando proporções */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Impede repetição da imagem */
+  width: 100%; /* Largura total da janela */
+  height: 66.67vh; /* 2/3 da altura da janela */
+  transition: opacity 0.5s ease; /* Transição suave para futuros efeitos de opacidade */
 }
 
-/* Configura o layout e estilo do conteúdo principal onde o sorteio ocorre */
+/* Estilização do conteúdo principal */
 .content {
-  position: relative; /* Posiciona relativamente para permitir o posicionamento absoluto dos filhos se necessário */
-  width: 100%; /* Largura completa da área de visualização */
-  height: calc(33.33vh); /* Altura definida como um terço da altura da janela de visualização */
-  background: rgba(0, 0, 0, 0.5); /* Fundo preto com transparência para visibilidade do texto */
-  text-align: center; /* Centraliza o texto dentro do div */
-  padding: 20px 0; /* Adiciona preenchimento vertical para espaçamento */
-  box-shadow: 0 -5px 10px rgba(0,0,0,0.5); /* Sombra para dar efeito de profundidade */
+  position: relative; /* Permite posicionamento relativo para filhos */
+  width: 100%; /* Largura total da janela */
+  height: 33.33vh; /* 1/3 da altura da janela */
+  background: rgba(0, 0, 0, 0.7); /* Fundo preto com 70% de opacidade para contraste */
+  display: flex; /* Usa Flexbox para layout */
+  flex-direction: column; /* Organiza itens em coluna */
+  justify-content: center; /* Centraliza verticalmente o conteúdo */
+  align-items: center; /* Centraliza horizontalmente o conteúdo */
+  padding: 20px; /* Preenchimento interno para espaçamento */
+  box-shadow: 0 -8px 15px rgba(0, 0, 0, 0.6); /* Sombra ascendente para profundidade */
+  transition: background 0.3s ease; /* Transição suave para mudanças de fundo */
 }
 
-/* Estiliza o elemento que exibirá o nome do vencedor */
+/* Estilização do nome do vencedor */
 #winnerName {
-  color: yellow; /* Cor do texto em amarelo para destaque */
-  margin-top: 20px; /* Margem superior para espaçamento do topo */
-  font-size: 78px; /* Tamanho grande do fonte para destaque */
+  color: #ffeb3b; /* Amarelo vibrante para destaque */
+  margin: 15px 0 0; /* Margem superior para separar do botão */
+  font-size: clamp(40px, 10vw, 78px); /* Tamanho responsivo entre 40px e 78px */
+  font-weight: bold; /* Negrito para ênfase */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Sombra para melhor legibilidade */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Animações suaves ao mudar */
 }
 
-/* Estiliza o botão de sorteio */
+#winnerName:empty {
+  opacity: 0; /* Esconde o elemento quando está vazio */
+}
+
+#winnerName:not(:empty) {
+  transform: scale(1.05); /* Leve aumento ao exibir o nome */
+  opacity: 1; /* Torna visível quando há conteúdo */
+}
+
+/* Estilização do botão */
 button {
-  padding: 10px 20px; /* Preenchimento para tornar o botão maior e mais clicável */
-  font-size: 16px; /* Tamanho do texto do botão */
-  color: white; /* Cor do texto do botão */
-  background-color: darkorange; /* Cor de fundo do botão */
-  border: none; /* Sem bordas para um visual mais limpo */
-  border-radius: 5px; /* Bordas arredondadas para estética moderna */
+  padding: 12px 20px; /* Preenchimento para área clicável confortável */
+  font-size: 18px; /* Tamanho da fonte legível */
+  color: #fff; /* Texto branco para contraste */
+  background-color: #ff5722; /* Laranja vibrante como fundo */
+  border: none; /* Remove bordas padrão */
+  border-radius: 8px; /* Bordas arredondadas para visual moderno */
   cursor: pointer; /* Cursor de ponteiro para indicar clicabilidade */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra para profundidade */
+  transition: all 0.3s ease; /* Transição suave para todas as propriedades */
+  display: flex; /* Flexbox para alinhar ícone e texto */
+  align-items: center; /* Centraliza verticalmente ícone e texto */
+  gap: 8px; /* Espaço entre ícone e texto */
 }
 
-/* Efeito de hover para o botão, mudando a cor de fundo ao passar o mouse */
+/* Estilização específica do ícone de estrelas */
+button i.bi.bi-stars {
+  font-size: 20px; /* Tamanho do ícone maior que o texto */
+  line-height: 1; /* Garante alinhamento correto com o texto */
+}
+
+/* Efeito ao passar o mouse sobre o botão */
 button:hover {
-  background-color: orange; /* Cor de fundo mais clara ao passar o mouse */
+  background-color: #ff8a50; /* Laranja mais claro no hover */
+  transform: translateY(-2px); /* Elevação sutil */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Sombra mais intensa */
+}
+
+/* Efeito ao clicar no botão */
+button:active {
+  transform: translateY(1px); /* Afunda levemente ao clicar */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra reduzida */
+}
+
+/* Ajustes para telas menores (até 768px) */
+@media (max-width: 768px) {
+  .background-image {
+    height: 60vh; /* Reduz altura da imagem de fundo */
+  }
+
+  .content {
+    height: 40vh; /* Aumenta altura do conteúdo */
+  }
+
+  button {
+    padding: 10px 18px; /* Reduz preenchimento */
+    font-size: 16px; /* Reduz tamanho da fonte */
+    gap: 6px; /* Menor espaço entre ícone e texto */
+  }
+  
+  button i.bi.bi-stars {
+    font-size: 18px; /* Reduz tamanho do ícone */
+  }
+}
+
+/* Ajustes para telas muito pequenas (até 480px) */
+@media (max-width: 480px) {
+  #winnerName {
+    font-size: clamp(30px, 8vw, 50px); /* Tamanho ainda menor para o texto */
+  }
+
+  button {
+    padding: 8px 15px; /* Preenchimento reduzido */
+    font-size: 14px; /* Fonte menor */
+    gap: 5px; /* Espaço mínimo entre ícone e texto */
+  }
+  
+  button i.bi.bi-stars {
+    font-size: 16px; /* Ícone ainda menor */
+  }
 }

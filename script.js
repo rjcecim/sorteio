@@ -1,87 +1,77 @@
-// Adiciona um ouvinte de evento ao botão de sorteio para executar a lógica quando clicado
+// Adiciona um ouvinte de evento ao botão "Sortear"
 document.getElementById('drawButton').addEventListener('click', async () => {
   try {
-    // Cria e executa um arquivo de áudio para adicionar efeito sonoro ao sorteio
-    const audio = new Audio('sound.mp3');
-    await audio.play();
-
-    // Faz uma solicitação para obter a lista de nomes de um arquivo JSON
-    const response = await fetch('cadastrados.json');
-    const data = await response.json();
-    const names = data.names;
+    // Toca um efeito sonoro ao iniciar o sorteio
+    const audio = new Audio('sound.mp3'); // Cria objeto de áudio
+    await audio.play(); // Aguarda a reprodução do áudio
     
-    // Chama a função para iniciar a animação dos nomes sendo sorteados
+    // Faz requisição para carregar a lista de nomes
+    const response = await fetch('cadastrados.json'); // Busca o arquivo JSON
+    const data = await response.json(); // Converte resposta para JSON
+    const names = data.names; // Extrai o array de nomes
+    
+    // Inicia a animação do sorteio
     animateDrawing(names);
-
   } catch (error) {
-    // Captura e exibe qualquer erro no console e na página web
-    console.error('Erro na operação:', error);
-    document.getElementById('winnerName').textContent = 'Erro ao realizar o sorteio!';
+    // Trata erros (ex.: áudio ou JSON indisponíveis)
+    console.error('Erro na operação:', error); // Loga o erro no console
+    document.getElementById('winnerName').textContent = 'Erro ao realizar o sorteio!'; // Mostra mensagem de erro na página
   }
 });
 
-// Função para animar a exibição de nomes aleatórios da lista
+// Função para animar a exibição de nomes aleatórios
 function animateDrawing(names) {
-  const winnerNameElement = document.getElementById('winnerName');
-  let counter = 0;
-  // Define um intervalo para mudar o nome exibido a cada 100 milissegundos
-  const animationInterval = setInterval(() => {
-    const randomIndex = Math.floor(Math.random() * names.length);
-    winnerNameElement.textContent = names[randomIndex];
-    counter++;
-    
-    // Interrompe a animação após 55 atualizações e exibe o vencedor final
-    if (counter >= 55) {
-      clearInterval(animationInterval);
-      displayFinalWinner(names, randomIndex);
+  const winnerNameElement = document.getElementById('winnerName'); // Seleciona o elemento do nome
+  let counter = 0; // Contador para limitar a animação
+  const animationInterval = setInterval(() => { // Executa a cada 100ms
+    const randomIndex = Math.floor(Math.random() * names.length); // Gera índice aleatório
+    winnerNameElement.textContent = names[randomIndex]; // Exibe nome aleatório
+    counter++; // Incrementa o contador
+    if (counter >= 55) { // Para após 55 ciclos (~5,5 segundos)
+      clearInterval(animationInterval); // Encerra o intervalo
+      displayFinalWinner(names, randomIndex); // Mostra o vencedor final
     }
-  }, 100);
+  }, 100); // Intervalo de 100 milissegundos
 }
 
-// Função para mostrar o nome final do vencedor e disparar efeito de confete
+// Função para exibir o vencedor final e disparar confete
 function displayFinalWinner(names, index) {
-  const winnerNameElement = document.getElementById('winnerName');
-  winnerNameElement.textContent = names[index];
-
-  // Se o nome do vencedor for válido, dispara o efeito de confete
-  if (names[index]) {
-    launchConfetti();
+  const winnerNameElement = document.getElementById('winnerName'); // Seleciona o elemento do nome
+  winnerNameElement.textContent = names[index]; // Define o nome final
+  if (names[index]) { // Verifica se o nome é válido
+    launchConfetti(); // Dispara o efeito de confete
   }
 }
 
-// Função aprimorada para lançar confetes com partículas que sobem mais alto
+// Função para criar o efeito de confete
 const launchConfetti = () => {
-  // Duração total da animação em milissegundos
-  const duration = 4000;
-  const animationEnd = Date.now() + duration;
-  const defaults = {
-    startVelocity: 60, // Aumenta a velocidade inicial para que as partículas subam mais
-    gravity: 0.3,      // Diminui a gravidade para que as partículas desacelerem menos na subida
-    spread: 360,
-    ticks: 60,
-    scalar: 1,
-    zIndex: 100,
+  const duration = 4000; // Duração total da animação (4 segundos)
+  const animationEnd = Date.now() + duration; // Momento de término da animação
+  const defaults = { // Configurações padrão das partículas
+    startVelocity: 60, // Velocidade inicial alta para subir mais
+    gravity: 0.3, // Gravidade baixa para queda lenta
+    spread: 360, // Dispersão em 360 graus
+    ticks: 60, // Duração das partículas no ar
+    scalar: 1, // Tamanho padrão das partículas
+    zIndex: 100, // Garante que o confete fique acima de outros elementos
   };
 
-  // Função auxiliar para gerar número aleatório em um intervalo
+  // Função auxiliar para gerar números aleatórios em um intervalo
   const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
-  const interval = setInterval(() => {
-    const timeLeft = animationEnd - Date.now();
-
-    if (timeLeft <= 0) {
-      clearInterval(interval);
+  const interval = setInterval(() => { // Executa a cada 250ms
+    const timeLeft = animationEnd - Date.now(); // Calcula tempo restante
+    if (timeLeft <= 0) { // Para quando o tempo acabar
+      clearInterval(interval); // Encerra o intervalo
       return;
     }
-
-    // Calcula a quantidade de partículas proporcional ao tempo restante
-    const particleCount = 1500 * (timeLeft / duration);
-    confetti(Object.assign({}, defaults, {
-      particleCount,
+    const particleCount = 1500 * (timeLeft / duration); // Ajusta número de partículas pelo tempo
+    confetti(Object.assign({}, defaults, { // Dispara confete com configurações
+      particleCount, // Quantidade de partículas
       origin: {
-        x: randomInRange(0, 1),         // Origem aleatória na horizontal
-        y: Math.random() * 0.2 + 0.8,     // Origem próxima à base para efeito de queda
+        x: randomInRange(0, 1), // Posição horizontal aleatória
+        y: Math.random() * 0.2 + 0.8, // Origem próxima à base da tela
       },
     }));
-  }, 250);
+  }, 250); // Intervalo de 250 milissegundos
 };
